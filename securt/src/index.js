@@ -3,6 +3,7 @@ import React, {useRef, useState} from 'react';
 import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
 import firebase from "firebase/compat/app";
 import { firebaseConfig } from '../config';
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 const Otp = () => {
     const [phoneNumber , setPhoneNumber] = useState('');
     const [code , setCode ] = useState('');
@@ -23,6 +24,7 @@ const Otp = () => {
         );
         firebase.auth().signInWithCredential(credential)
         .then(()=>{
+            
             setCode('');
         })
         .catch((error) =>{
@@ -31,6 +33,19 @@ const Otp = () => {
         Alert.alert(
             'Login Successful :)'
         )
+        const auth = getAuth();
+        onAuthStateChanged(auth, (user) => {
+            console.log(user.uid);
+            firebase.firestore().collection('Usuarios').doc(`${user.uid}`).set(
+                {
+                    Numero:user.phoneNumber
+                }
+            ).catch(error =>{
+                console.log('error al crear el usuario')
+            }
+            )
+          });
+        
     }
     return (
         <View style={styles.container}>

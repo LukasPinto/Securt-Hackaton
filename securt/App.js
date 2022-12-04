@@ -3,12 +3,12 @@ import { StyleSheet, Text, View, TouchableOpacity, TextInput,Alert} from 'react-
 import React, {useRef, useState} from 'react';
 import Otp from './src';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import Contactos from './src/contactos';
 
 export default function App() {
   const auth = getAuth();
   const [uid , setUid] = useState('');
   onAuthStateChanged(auth, (user) => {
-    console.log(user)
     if (user && uid==='') {
       
       setUid(user.uid);
@@ -24,7 +24,7 @@ export default function App() {
     
     
    {!(uid === '') ? ( <> 
-    <Text>logeado asdfadsfdfadad dsfasdfd  </Text>
+    <Contactos></Contactos>
     </>) : (<>
       <Otp/>
     </>)
